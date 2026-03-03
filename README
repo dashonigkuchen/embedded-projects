@@ -1,0 +1,109 @@
+# Car seat control (ESP32-C3 / PlatformIO)
+
+Firmware for a DIY car-seat control unit with heating/cooling and battery charging integration.
+
+## Status
+
+- Hardware/feature intent is documented below.
+- Current firmware in [src/main.cpp](src/main.cpp) is still the PlatformIO template (no seat-control logic yet).
+
+## What this is (intended)
+
+The overall project is a car seat with:
+
+- Electrical adjustment motors (not handled by this firmware)
+- Seat heating and cooling
+- A custom battery pack
+- A charging module that the ESP32 talks to
+
+This firmware is intended to run on an ESP32-C3 (configured for the Adafruit QT Py ESP32-C3 in [platformio.ini](platformio.ini)).
+
+## Planned functionality
+
+### Heating & cooling control
+
+- A potentiometer provides the user setpoint/input.
+- The ESP32 drives heating and cooling via PWM outputs.
+- A dedicated “kill/enable” output can disable both heating and cooling.
+- Heating also reads a thermistor input; the firmware must enforce temperature safety limits to avoid damage.
+
+### Charging module integration
+
+- Communication with the charging module via I2C.
+- An interrupt line from the module to the ESP32 signals events (e.g., charger plugged in).
+- An ESP32 output can disable/stop charging (if needed).
+
+### Optional WiFi
+
+- The ESP32 may try to connect to a configured WiFi for monitoring/control.
+- WiFi should be power-aware; if it drains too much battery it may be disabled.
+
+## Hardware
+
+Known:
+
+- MCU/board: Adafruit QT Py ESP32-C3 (PlatformIO env: `adafruit_qtpy_esp32c3`)
+
+TBD (please fill in):
+
+- Seat heater/cooler driver hardware (MOSFETs? relay? H-bridge? dedicated module?)
+- Potentiometer value and wiring (e.g., 10k to 3V3/GND with wiper to ADC)
+- Thermistor type (e.g., 10k NTC) and divider resistor value
+- Charging module model, I2C address, and pinout
+- Power path and voltage levels (battery voltage, 3V3 regulator, grounds)
+
+## Pinout / wiring (TBD)
+
+Document the final pin mapping here once you decide it:
+
+- `POT_ADC`: GPIO __ (ADC)
+- `THERM_ADC`: GPIO __ (ADC)
+- `HEAT_PWM`: GPIO __ (PWM)
+- `COOL_PWM`: GPIO __ (PWM)
+- `HVAC_ENABLE`: GPIO __ (digital out)
+- `CHG_I2C_SDA`: GPIO __
+- `CHG_I2C_SCL`: GPIO __
+- `CHG_INT`: GPIO __ (interrupt in)
+- `CHG_DISABLE`: GPIO __ (digital out)
+
+## Build, flash, monitor
+
+Prerequisites:
+
+- PlatformIO (VS Code extension or `pio` CLI)
+
+Commands (from repo root):
+
+- Build: `pio run`
+- Upload: `pio run -t upload`
+- Serial monitor: `pio device monitor`
+
+If you have multiple serial devices connected, specify the port:
+
+- `pio run -t upload --upload-port /dev/ttyUSB0`
+- `pio device monitor --port /dev/ttyUSB0`
+
+## Configuration
+
+TBD:
+
+- WiFi credentials/config mechanism (compile-time constants? `secrets.h`? captive portal?)
+- Temperature limits and PWM frequency
+- Charging-module parameters (I2C address, thresholds)
+
+## Safety notes
+
+- Seat heaters can overheat if driven blindly; the thermistor should always be enforced with conservative limits.
+- Add an independent hardware fuse / cutoff where appropriate; do not rely purely on firmware for safety.
+
+## Roadmap
+
+- Implement PWM outputs for heating/cooling
+- Implement potentiometer input + mapping to PWM
+- Add thermistor reading + overtemp protection
+- Add I2C driver for the charging module + interrupt handling
+- Decide whether WiFi is worth the power cost
+
+## License
+
+TBD
