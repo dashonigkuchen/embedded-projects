@@ -40,31 +40,77 @@ This firmware is intended to run on an ESP32-C3 (configured for the Adafruit QT 
 
 ## Hardware
 
-Known:
+This repo contains both firmware and a custom-hardware design.
 
-- MCU/board: Adafruit QT Py ESP32-C3 (PlatformIO env: `adafruit_qtpy_esp32c3`)
+- Firmware is currently configured for an Adafruit QT Py ESP32-C3 (`adafruit_qtpy_esp32c3` in [platformio.ini](platformio.ini)).
+- The KiCad design in [assets/schematics/chris/](assets/schematics/chris/) uses an ESP32-C3 module directly (ESP32-C3-WROOM-02-H4).
 
-TBD (please fill in):
+### Schematics (screenshots)
 
-- Seat heater/cooler driver hardware (MOSFETs? relay? H-bridge? dedicated module?)
-- Potentiometer value and wiring (e.g., 10k to 3V3/GND with wiper to ADC)
-- Thermistor type (e.g., 10k NTC) and divider resistor value
-- Charging module model, I2C address, and pinout
-- Power path and voltage levels (battery voltage, 3V3 regulator, grounds)
+These images are exported from the KiCad project and are useful for quickly understanding the blocks:
 
-## Pinout / wiring (TBD)
+![Power control](assets/schematics/PowerControl.png)
+![Charger](assets/schematics/Charger.png)
+![ESP32](assets/schematics/ESP32.png)
+![3V3 regulator](assets/schematics/ESP3_3VRegulator.png)
+![Heater/fan outputs](assets/schematics/HeaterFanOutput.png)
+![Inputs & potis](assets/schematics/InputAndPotis.png)
 
-Document the final pin mapping here once you decide it:
+### Key parts (from the order list)
 
-- `POT_ADC`: GPIO __ (ADC)
-- `THERM_ADC`: GPIO __ (ADC)
-- `HEAT_PWM`: GPIO __ (PWM)
-- `COOL_PWM`: GPIO __ (PWM)
-- `HVAC_ENABLE`: GPIO __ (digital out)
-- `CHG_I2C_SDA`: GPIO __
-- `CHG_I2C_SCL`: GPIO __
-- `CHG_INT`: GPIO __ (interrupt in)
-- `CHG_DISABLE`: GPIO __ (digital out)
+The order list is in [assets/order/export_cart_20260301_180926.csv](assets/order/export_cart_20260301_180926.csv).
+
+Notable parts from that cart export:
+
+- ESP32 module: ESP32-C3-WROOM-02-H4 (LCSC C2944070), qty 2
+- Charger IC: BQ25792RQMR (LCSC C2862876), qty 2 (1–4 cell, up to 5A charger IC)
+- Automotive relays: STKF-12V3 (LCSC C771768), qty 10 (12V coil, 15A@14VDC contacts)
+- Power MOSFETs: AOD4184A (LCSC C99124), qty 5 (TO-252 / DPAK)
+- Small MOSFETs: AO3400A (LCSC C347475), qty 20 (SOT-23)
+- Schottky diodes: SS54F (LCSC C5359893), qty 20 (40V / 5A)
+- Inductors: CR6045-2R2N (LCSC C7588804), qty 10 (2.2µH)
+- NTC thermistor: HNTC-103F3435FA (LCSC C52204610), qty 10 (10k NTC)
+- Terminal blocks: MX142R-5.08-08P (LCSC C48688013), qty 1; MX142R-5.08-02P (LCSC C48688007), qty 5
+
+### Signals / nets (as named in the schematic)
+
+If you want the firmware pinout to match the PCB, these are the key named nets to map to ESP32-C3 GPIOs:
+
+- Heater: `HEATER_PWM`, `HEATER_OUT`, `HEATER_POTI`, `HEATER_THERMISTOR`
+- Fan/cooling: `FAN_PWM`, `FAN_OUT`, `FAN_POTI`
+- Charger (BQ25792): `BQ_SDA`, `BQ_SCL`, `BQ_INT`, `BQ_STAT`, `BQ_CE`, `BQ_ILIM_HIZ`, `BQ_TS`
+- Power control: `POWER_EN`, `V_SYSTEM`, `V_SYSTEM_TOGGLE`
+- ESP control: `ESP_EN`, `ESP_BOOT`
+
+## Pinout / wiring (from KiCad schematic)
+
+The KiCad schematic places net labels directly on the ESP32-C3 module pins (U1). Based on those labels, the mapping is:
+
+- Heater
+	- `HEATER_PWM` -> ESP32-C3 `IO7`
+	- `HEATER_POTI` -> ESP32-C3 `TXD`
+	- `HEATER_THERMISTOR` -> ESP32-C3 `IO3`
+
+- Fan / cooling
+	- `FAN_PWM` -> ESP32-C3 `IO6`
+	- `FAN_POTI` -> ESP32-C3 `IO18`
+
+- Charger (BQ25792)
+	- `BQ_SDA` -> ESP32-C3 `IO9`
+	- `BQ_SCL` -> ESP32-C3 `IO8`
+	- `BQ_INT` -> ESP32-C3 `IO19`
+	- `BQ_CE` -> ESP32-C3 `IO0`
+
+- USB (debug / flashing)
+	- `USB_D+` -> ESP32-C3 `IO2`
+	- `USB_D-` -> ESP32-C3 `IO1`
+
+- Boot control
+	- `ESP_BOOT` -> ESP32-C3 `IO4`
+
+Notes:
+
+- The schematic also labels `ESP_EN` and `POWER_EN` at pins that are currently named `GND` in the ESP32-C3 symbol. Please verify the custom symbol pinout and/or those net labels before relying on that part of the mapping.
 
 ## Build, flash, monitor
 
