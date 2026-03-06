@@ -113,8 +113,15 @@ static bool configure() {
     ok &= writeReg(reg::CHARGE_CURR_LIM_H, (uint8_t)(ichgRaw >> 8));
     ok &= writeReg(reg::CHARGE_CURR_LIM_L, (uint8_t)(ichgRaw & 0xFF));
 
-    // Input voltage limit: 100 mV per bit, offset 3600 mV
-    ok &= writeReg(reg::INPUT_VOLT_LIM, BQ_INPUT_VOLTAGE_100MV);
+    // Input voltage limit:
+    //   - Configuration: BQ_INPUT_VOLTAGE_100MV in 100 mV units (e.g. 42 → 4.2 V)
+    //   - Register encoding: 100 mV per bit, offset 3600 mV
+    //     code = (V_limit_mV − 3600 mV) / 100 mV
+    {
+        uint16_t vinLimitMv = (uint16_t)BQ_INPUT_VOLTAGE_100MV * 100U;
+        uint8_t  vinLimRaw  = (uint8_t)((vinLimitMv - 3600U) / 100U);
+        ok &= writeReg(reg::INPUT_VOLT_LIM, vinLimRaw);
+    }
 
     // Input current limit: 10 mA per bit
     uint16_t iinRaw = BQ_INPUT_CURRENT_MA / 10;
