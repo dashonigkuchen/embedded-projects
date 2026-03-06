@@ -206,12 +206,18 @@ void update(unsigned long now_ms) {
         return;
     }
 
-    bool shouldRead = (now_ms - s_lastPoll >= CHARGER_POLL_MS)
-                    || interruptPending;
+    bool shouldRead = false;
 
-    if (shouldRead) {
+    // Make check-and-clear of interruptPending atomic with respect to ISRs
+    noInterrupts();
+    if ((now_ms - s_lastPoll >= CHARGER_POLL_MS) || interruptPending) {
+        shouldRead = true;
         interruptPending = false;
         s_lastPoll = now_ms;
+    }
+    interrupts();
+
+    if (shouldRead) {
         readStatus();
     }
 }
