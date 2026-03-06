@@ -26,6 +26,17 @@ static constexpr uint8_t PIN_HEATER_THERM =  3;   // NTC thermistor       (ADC1_
 static constexpr uint8_t PIN_FAN_PWM      =  6;   // PWM to fan MOSFET gate
 static constexpr uint8_t PIN_FAN_POTI     = 18;   // Potentiometer input
 
+// On ESP32-C3 only GPIO 0-5 are ADC-capable. Prevent builds that keep
+// potentiometer inputs on non-ADC pins, which would make analogRead()
+// always return 0 and disable manual controls.
+#if defined(ARDUINO_ARCH_ESP32) && defined(CONFIG_IDF_TARGET_ESP32C3)
+  #if (PIN_HEATER_POTI > 5)
+    #error "PIN_HEATER_POTI must be mapped to an ADC-capable GPIO (0-5) on ESP32-C3 or routed via an external ADC."
+  #endif
+  #if (PIN_FAN_POTI > 5)
+    #error "PIN_FAN_POTI must be mapped to an ADC-capable GPIO (0-5) on ESP32-C3 or routed via an external ADC."
+  #endif
+#endif
 // Charger (BQ25792)
 static constexpr uint8_t PIN_BQ_SDA       =  9;   // I2C data
 static constexpr uint8_t PIN_BQ_SCL       =  8;   // I2C clock
