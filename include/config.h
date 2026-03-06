@@ -37,11 +37,13 @@ static constexpr uint8_t  ADC_BITS      = 12;
 static constexpr uint16_t ADC_MAX_VALUE = (1 << ADC_BITS) - 1;          // 4095
 
 // ─── PWM ─────────────────────────────────────────────────────────────
-static constexpr uint32_t HEATER_PWM_FREQ =  1000;  // Hz  – low for resistive load
-static constexpr uint8_t  HEATER_PWM_RES  =     8;  // bits  (duty 0–255)
+static constexpr uint32_t HEATER_PWM_FREQ     =  1000;  // Hz  – low for resistive load
+static constexpr uint8_t  HEATER_PWM_RES      =     8;  // bits
+static constexpr uint16_t HEATER_PWM_MAX_DUTY = (1 << HEATER_PWM_RES) - 1;  // 255 for 8-bit
 
-static constexpr uint32_t FAN_PWM_FREQ    = 25000;  // Hz  – 25 kHz for quiet fan
-static constexpr uint8_t  FAN_PWM_RES     =     8;  // bits  (duty 0–255)
+static constexpr uint32_t FAN_PWM_FREQ        = 25000;  // Hz  – 25 kHz for quiet fan
+static constexpr uint8_t  FAN_PWM_RES         =     8;  // bits
+static constexpr uint16_t FAN_PWM_MAX_DUTY    = (1 << FAN_PWM_RES) - 1;     // 255 for 8-bit
 
 // ─── NTC thermistor ──────────────────────────────────────────────────
 //  10 kΩ NTC, B = 3435, voltage-divider with 10 kΩ pull-up to 3.3 V:

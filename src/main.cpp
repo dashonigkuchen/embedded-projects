@@ -87,7 +87,11 @@ void loop() {
     unsigned long now = millis();
 
     // Fixed-rate control loop
-    if (now - s_lastLoop < LOOP_INTERVAL_MS) return;
+    unsigned long elapsed = now - s_lastLoop;
+    if (elapsed < LOOP_INTERVAL_MS) {
+        delay(LOOP_INTERVAL_MS - elapsed);
+        now = millis();
+    }
     s_lastLoop = now;
 
     // Feed the watchdog

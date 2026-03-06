@@ -15,7 +15,7 @@ namespace heater {
 static float         s_temperature   = NAN;
 static bool          s_overtemp      = false;
 static bool          s_sensorFault   = false;
-static uint8_t       s_duty          = 0;
+static uint16_t      s_duty          = 0;
 static unsigned long s_lastThermRead = 0;
 
 // ── helpers ──────────────────────────────────────────────────────────
@@ -86,7 +86,7 @@ void update(unsigned long now_ms) {
         s_duty = 0;                        // safety: heater OFF
     } else {
         uint16_t poti = readPoti();
-        s_duty = (uint8_t)map(poti, 0, (long)ADC_MAX_VALUE, 0, 255);
+        s_duty = (uint16_t)map(poti, 0, (long)ADC_MAX_VALUE, 0, (long)HEATER_PWM_MAX_DUTY);
     }
 
     ledcWrite(LEDC_CHANNEL_HEATER, s_duty);
@@ -95,6 +95,6 @@ void update(unsigned long now_ms) {
 float   temperature()    { return s_temperature; }
 bool    isSafetyActive() { return s_overtemp || s_sensorFault; }
 bool    isSensorFault()  { return s_sensorFault; }
-uint8_t duty()           { return s_duty; }
+uint16_t duty()          { return s_duty; }
 
 }  // namespace heater

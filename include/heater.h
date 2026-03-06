@@ -24,7 +24,7 @@ bool  isSafetyActive();
 /// True when the NTC reading is considered invalid.
 bool  isSensorFault();
 
-/// Current PWM duty cycle (0–255).
-uint8_t duty();
+/// Current PWM duty cycle (0 – HEATER_PWM_MAX_DUTY).
+uint16_t duty();
 
 }  // namespace heater

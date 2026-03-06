@@ -14,7 +14,7 @@ void init();
 /// Call every loop iteration.
 void update();
 
-/// Current PWM duty cycle (0–255).
-uint8_t duty();
+/// Current PWM duty cycle (0 – FAN_PWM_MAX_DUTY).
+uint16_t duty();
 
 }  // namespace fan

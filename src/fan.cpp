@@ -10,7 +10,7 @@ static constexpr uint8_t LEDC_CHANNEL_FAN = 1;
 
 namespace fan {
 
-static uint8_t s_duty = 0;
+static uint16_t s_duty = 0;
 
 void init() {
     ledcSetup(LEDC_CHANNEL_FAN, FAN_PWM_FREQ, FAN_PWM_RES);
@@ -22,10 +22,10 @@ void init() {
 
 void update() {
     uint16_t poti = analogRead(PIN_FAN_POTI);
-    s_duty = (uint8_t)map(poti, 0, (long)ADC_MAX_VALUE, 0, 255);
+    s_duty = (uint16_t)map(poti, 0, (long)ADC_MAX_VALUE, 0, (long)FAN_PWM_MAX_DUTY);
     ledcWrite(LEDC_CHANNEL_FAN, s_duty);
 }
 
-uint8_t duty() { return s_duty; }
+uint16_t duty() { return s_duty; }
 
 }  // namespace fan
