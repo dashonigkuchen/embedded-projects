@@ -50,63 +50,80 @@ switch:
   - platform: gpio
     name: "Relay 1"
     pin: { sn74hc595: shift_register, number: 0 }
+    restore_mode: ALWAYS_ON
 
   - platform: gpio
     name: "Relay 2"
     pin: { sn74hc595: shift_register, number: 1 }
+    restore_mode: ALWAYS_ON
 
   - platform: gpio
     name: "Relay 3"
     pin: { sn74hc595: shift_register, number: 2 }
+    restore_mode: ALWAYS_ON
 
   - platform: gpio
     name: "Relay 4"
     pin: { sn74hc595: shift_register, number: 3 }
+    restore_mode: ALWAYS_ON
 
   - platform: gpio
     name: "Relay 5"
     pin: { sn74hc595: shift_register, number: 4 }
+    restore_mode: ALWAYS_ON
 
   - platform: gpio
     name: "Relay 6"
     pin: { sn74hc595: shift_register, number: 5 }
+    restore_mode: ALWAYS_ON
 
   - platform: gpio
     name: "Relay 7"
     pin: { sn74hc595: shift_register, number: 6 }
+    restore_mode: ALWAYS_ON
 
   - platform: gpio
     name: "Relay 8"
     pin: { sn74hc595: shift_register, number: 7 }
+    restore_mode: ALWAYS_ON
 
   - platform: gpio
     name: "Relay 9"
     pin: { sn74hc595: shift_register, number: 8 }
+    restore_mode: ALWAYS_ON
 
   - platform: gpio
     name: "Relay 10"
     pin: { sn74hc595: shift_register, number: 9 }
+    restore_mode: ALWAYS_ON
 
   - platform: gpio
     name: "Relay 11"
     pin: { sn74hc595: shift_register, number: 10 }
+    restore_mode: ALWAYS_ON
 
   - platform: gpio
     name: "Relay 12"
     pin: { sn74hc595: shift_register, number: 11 }
+    restore_mode: ALWAYS_ON
 
   - platform: gpio
     name: "Relay 13"
     pin: { sn74hc595: shift_register, number: 12 }
+    restore_mode: ALWAYS_ON
 
   - platform: gpio
     name: "Relay 14"
     pin: { sn74hc595: shift_register, number: 13 }
+    restore_mode: ALWAYS_ON
 
   - platform: gpio
     name: "Relay 15"
     pin: { sn74hc595: shift_register, number: 14 }
+    restore_mode: ALWAYS_ON
 
   - platform: gpio
     name: "Relay 16"
     pin: { sn74hc595: shift_register, number: 15 }
+    restore_mode: ALWAYS_ON
+
