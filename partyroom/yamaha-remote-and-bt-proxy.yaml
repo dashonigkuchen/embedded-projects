@@ -1,0 +1,109 @@
+esphome:
+  name: yamaha-remote-and-bt-proxy
+  friendly_name: Yamaha IR Remote (+ Shelly BT Proxy)
+
+esp32:
+  board: esp32dev
+  framework:
+    type: esp-idf
+
+logger:
+# Enable Home Assistant API
+api:
+  encryption:
+    key: !secret api_key
+
+wifi:
+  ssid: !secret wifi_ssid
+  password: !secret wifi_password
+  domain: ".fritz.box"
+
+# ------------------------------------------------------
+# HARDWARE-POWER-SUPPLY (needed for IR LEDs)
+# ------------------------------------------------------
+switch:
+  - platform: gpio
+    pin: GPIO21
+    id: ir_power
+    name: "IR System Power"
+    restore_mode: ALWAYS_ON
+
+# ------------------------------------------------------
+# BLUETOOTH PROXY (for Shelly BLU Button 4)
+# ------------------------------------------------------
+esp32_ble_tracker:
+bluetooth_proxy:
+  active: true
+
+# ------------------------------------------------------
+# IR Receiver (only needed for initial setup)
+# ------------------------------------------------------
+#remote_receiver:
+#  pin:
+#    number: GPIO14
+#    inverted: true
+#    mode:
+#      input: true
+#      pullup: true
+#  dump: nec
+
+# ------------------------------------------------------
+# IR SENDER
+# ------------------------------------------------------
+remote_transmitter:
+  pin: GPIO4
+  carrier_duty_percent: 50%
+  non_blocking: true
+
+# ------------------------------------------------------
+# HOME ASSISTANT BUTTONS
+# ------------------------------------------------------
+button:
+  - platform: template
+    name: "Power"
+    on_press:
+      - remote_transmitter.transmit_nec:
+          address: 0x817E
+          command: 0xD52A
+
+  - platform: template
+    name: "Vol Plus"
+    on_press:
+      - remote_transmitter.transmit_nec:
+          address: 0x857A
+          command: 0xE51A
+
+  - platform: template
+    name: "Vol Minus"
+    on_press:
+      - remote_transmitter.transmit_nec:
+          address: 0x857A
+          command: 0xE41B
+
+  - platform: template
+    name: "HDMI 1"
+    on_press:
+      - remote_transmitter.transmit_nec:
+          address: 0x857A
+          command: 0x3847
+
+  - platform: template
+    name: "HDMI 2"
+    on_press:
+      - remote_transmitter.transmit_nec:
+          address: 0x857A
+          command: 0x354A
+
+  - platform: template
+    name: "HDMI 3"
+    on_press:
+      - remote_transmitter.transmit_nec:
+          address: 0x857A
+          command: 0x324D
+
+  - platform: template
+    name: "HDMI 4"
+    on_press:
+      - remote_transmitter.transmit_nec:
+          address: 0x857A
+          command: 0x2F50
