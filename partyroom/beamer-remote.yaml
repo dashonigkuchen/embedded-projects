@@ -1,0 +1,50 @@
+esphome:
+  name: beamer-remote
+  friendly_name: Beamer IR Remote
+
+esp32:
+  board: esp32dev
+  framework:
+    type: esp-idf
+
+logger:
+# Enable Home Assistant API
+api:
+  encryption:
+    key: !secret api_key
+
+wifi:
+  ssid: !secret wifi_ssid
+  password: !secret wifi_password
+  domain: ".fritz.box"
+
+# ------------------------------------------------------
+# IR Receiver (only needed for initial setup)
+# ------------------------------------------------------
+#remote_receiver:
+#  pin:
+#    number: GPIO14
+#    inverted: true
+#    mode:
+#      input: true
+#      pullup: true
+#  dump: nec
+
+# ------------------------------------------------------
+# IR SENDER
+# ------------------------------------------------------
+remote_transmitter:
+  pin: GPIO4
+  carrier_duty_percent: 50%
+  non_blocking: true
+
+# ------------------------------------------------------
+# HOME ASSISTANT BUTTONS
+# ------------------------------------------------------
+button:
+  - platform: template
+    name: "Power"
+    on_press:
+      - remote_transmitter.transmit_nec:
+          address: 0xCD32
+          command: 0xFD02

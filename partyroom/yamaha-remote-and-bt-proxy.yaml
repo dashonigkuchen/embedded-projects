@@ -19,16 +19,6 @@ wifi:
   domain: ".fritz.box"
 
 # ------------------------------------------------------
-# HARDWARE-POWER-SUPPLY (needed for IR LEDs)
-# ------------------------------------------------------
-switch:
-  - platform: gpio
-    pin: GPIO21
-    id: ir_power
-    name: "IR System Power"
-    restore_mode: ALWAYS_ON
-
-# ------------------------------------------------------
 # BLUETOOTH PROXY (for Shelly BLU Button 4)
 # ------------------------------------------------------
 esp32_ble_tracker:
