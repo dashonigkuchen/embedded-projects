@@ -62,46 +62,52 @@ button:
       - remote_transmitter.transmit_nec:
           address: 0x817E
           command: 0xD52A
-
+    icon: "mdi:power"
+    
   - platform: template
     name: "Vol Plus"
     on_press:
       - remote_transmitter.transmit_nec:
           address: 0x857A
           command: 0xE51A
-
+    icon: "mdi:volume-plus"
+    
   - platform: template
     name: "Vol Minus"
     on_press:
       - remote_transmitter.transmit_nec:
           address: 0x857A
           command: 0xE41B
-
+    icon: "mdi:volume-minus"
+    
   - platform: template
     name: "HDMI 1"
     on_press:
       - remote_transmitter.transmit_nec:
           address: 0x857A
           command: 0x3847
-
+    icon: "mdi:numeric1"
+    
   - platform: template
     name: "HDMI 2"
     on_press:
       - remote_transmitter.transmit_nec:
           address: 0x857A
           command: 0x354A
-
+    icon: "mdi:numeric2"
+    
   - platform: template
     name: "HDMI 3"
     on_press:
       - remote_transmitter.transmit_nec:
           address: 0x857A
           command: 0x324D
-
+    icon: "mdi:numeric3"
+    
   - platform: template
     name: "HDMI 4"
     on_press:
       - remote_transmitter.transmit_nec:
           address: 0x857A
           command: 0x2F50
-
+    icon: "mdi:numeric4"

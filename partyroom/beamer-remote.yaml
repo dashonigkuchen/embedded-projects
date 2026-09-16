@@ -55,4 +55,4 @@ button:
       - remote_transmitter.transmit_nec:
           address: 0xCD32
           command: 0xFD02
-
+    icon: "mdi:power"
