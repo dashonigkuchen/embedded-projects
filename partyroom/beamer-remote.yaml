@@ -17,6 +17,9 @@ wifi:
   ssid: !secret wifi_ssid
   password: !secret wifi_password
   domain: ".fritz.box"
+  ap:
+    ssid: beamer-remote
+    password: !secret wifi_password
 
 # Enable web server for OTA updates
 web_server:
@@ -50,9 +53,17 @@ remote_transmitter:
 # ------------------------------------------------------
 button:
   - platform: template
-    name: "Power"
+    name: "Optoma Power On"
     on_press:
       - remote_transmitter.transmit_nec:
           address: 0xCD32
-          command: 0xFD02
-    icon: "mdi:power"
+          command: 0xD12E
+    icon: "mdi:power-on"
+
+  - platform: template
+    name: "Optoma Power Off"
+    on_press:
+      - remote_transmitter.transmit_nec:
+          address: 0xCD32
+          command: 0xD02F
+    icon: "mdi:power-off"
