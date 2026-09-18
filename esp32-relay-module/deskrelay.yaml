@@ -30,6 +30,7 @@ wifi:
 # Enable web server for OTA
 web_server:
   port: 80
+  local: true
 
 ota:
   - platform: web_server

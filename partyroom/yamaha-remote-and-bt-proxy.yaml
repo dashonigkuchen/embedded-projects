@@ -6,6 +6,9 @@ esp32:
   board: esp32dev
   framework:
     type: esp-idf
+    advanced:
+      minimum_chip_revision: 3.1
+      sram1_as_iram: true
 
 logger:
 # Enable Home Assistant API
@@ -24,6 +27,7 @@ wifi:
 # Enable web server for OTA updates
 web_server:
   port: 80
+  local: true
 
 ota:
   - platform: web_server
@@ -60,11 +64,19 @@ remote_transmitter:
 # ------------------------------------------------------
 button:
   - platform: template
+    name: "Power Toggle"
+    on_press:
+      - remote_transmitter.transmit_nec:
+          address: 0x817E
+          command: 0xD52A
+    icon: "mdi:power"
+  
+  - platform: template
     name: "Power On"
     on_press:
       - remote_transmitter.transmit_nec:
           address: 0x817E
-          command: 0x27D8
+          command: 0x817E
     icon: "mdi:power-on"
 
   - platform: template
@@ -72,7 +84,7 @@ button:
     on_press:
       - remote_transmitter.transmit_nec:
           address: 0x817E
-          command: 0x26D9
+          command: 0x807F
     icon: "mdi:power-off"
     
   - platform: template

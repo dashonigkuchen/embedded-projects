@@ -6,6 +6,9 @@ esp32:
   board: esp32dev
   framework:
     type: esp-idf
+    advanced:
+      minimum_chip_revision: 3.1
+      sram1_as_iram: true
 
 logger:
 # Enable Home Assistant API
@@ -24,9 +27,17 @@ wifi:
 # Enable web server for OTA updates
 web_server:
   port: 80
+  local: true
 
 ota:
   - platform: web_server
+
+# ------------------------------------------------------
+# BLUETOOTH PROXY (for Shelly BLU Button 4)
+# ------------------------------------------------------
+esp32_ble_tracker:
+bluetooth_proxy:
+  active: true
 
 # ------------------------------------------------------
 # IR Receiver (only needed for initial setup)
@@ -53,17 +64,9 @@ remote_transmitter:
 # ------------------------------------------------------
 button:
   - platform: template
-    name: "Optoma Power On"
+    name: "Power"
     on_press:
       - remote_transmitter.transmit_nec:
           address: 0xCD32
-          command: 0xD12E
-    icon: "mdi:power-on"
-
-  - platform: template
-    name: "Optoma Power Off"
-    on_press:
-      - remote_transmitter.transmit_nec:
-          address: 0xCD32
-          command: 0xD02F
-    icon: "mdi:power-off"
+          command: 0xFD02
+    icon: "mdi:power"
