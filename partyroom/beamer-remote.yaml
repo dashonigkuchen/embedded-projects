@@ -69,4 +69,7 @@ button:
       - remote_transmitter.transmit_nec:
           address: 0xCD32
           command: 0xFD02
+          repeat:
+            times: 3
+            wait_time: 20ms
     icon: "mdi:power"

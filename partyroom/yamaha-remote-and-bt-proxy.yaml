@@ -69,6 +69,9 @@ button:
       - remote_transmitter.transmit_nec:
           address: 0x817E
           command: 0xD52A
+          repeat:
+            times: 3
+            wait_time: 10ms
     icon: "mdi:power"
   
   - platform: template
@@ -77,6 +80,9 @@ button:
       - remote_transmitter.transmit_nec:
           address: 0x817E
           command: 0x817E
+          repeat:
+            times: 3
+            wait_time: 10ms
     icon: "mdi:power-on"
 
   - platform: template
@@ -85,6 +91,9 @@ button:
       - remote_transmitter.transmit_nec:
           address: 0x817E
           command: 0x807F
+          repeat:
+            times: 3
+            wait_time: 10ms
     icon: "mdi:power-off"
     
   - platform: template
@@ -109,6 +118,9 @@ button:
       - remote_transmitter.transmit_nec:
           address: 0x857A
           command: 0x3847
+          repeat:
+            times: 3
+            wait_time: 10ms
     icon: "mdi:numeric1"
     
   - platform: template
@@ -117,6 +129,9 @@ button:
       - remote_transmitter.transmit_nec:
           address: 0x857A
           command: 0x354A
+          repeat:
+            times: 3
+            wait_time: 10ms
     icon: "mdi:numeric2"
     
   - platform: template
@@ -125,6 +140,9 @@ button:
       - remote_transmitter.transmit_nec:
           address: 0x857A
           command: 0x324D
+          repeat:
+            times: 3
+            wait_time: 10ms
     icon: "mdi:numeric3"
     
   - platform: template
@@ -133,4 +151,7 @@ button:
       - remote_transmitter.transmit_nec:
           address: 0x857A
           command: 0x2F50
+          repeat:
+            times: 3
+            wait_time: 10ms
     icon: "mdi:numeric4"
